@@ -26,7 +26,8 @@ namespace Mittwald\Typo3Forum\Domain\Repository\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Repository\AbstractRepository;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+    use TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager;
+    use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
 /**
@@ -45,25 +46,31 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
  *             http://opensource.org/licenses/gpl-license.php
  *
  */
-class FrontendUserRepository extends AbstractRepository  {
-
+class FrontendUserRepository extends AbstractRepository
+{
 	/**
-	 * @var \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager
+	 * @var FrontendConfigurationManager
+     *
 	 * @inject
 	 */
-	protected $frontendConfigurationManager;
+	protected FrontendConfigurationManager $frontendConfigurationManager;
 
-	/**
-	 * Finds the user that is currently logged in, or NULL if no user is logged in.
-	 *
-	 * @return FrontendUser The user that is currently logged in, or AnonymousFrontendUser if no user is logged in.
-	 */
-	public function findCurrent() {
-		$currentUserUid = (int) $GLOBALS['TSFE']->fe_user->user['uid'];
-		return $currentUserUid ? $this->findByUid($currentUserUid) : new AnonymousFrontendUser();
-	}
+    /**
+     * Finds the user that is currently logged in, or NULL if no user is logged in.
+     *
+     * @return FrontendUser|AnonymousFrontendUser The user that is currently logged in, or AnonymousFrontendUser if no
+     *                                            user is logged in.
+     */
+    public function findCurrent(): FrontendUser|AnonymousFrontendUser
+    {
+        $currentUserUid = (int) $GLOBALS['TSFE']->fe_user->user['uid'];
 
-	/**
+        return $currentUserUid
+            ? $this->findByUid($currentUserUid)
+            : new AnonymousFrontendUser();
+    }
+
+    /**
 	 *
 	 * Finds users for a specific filterset. Page navigation is possible.
 	 *

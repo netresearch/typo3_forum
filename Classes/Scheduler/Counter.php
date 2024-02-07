@@ -95,7 +95,7 @@ class Counter extends AbstractDatabaseTask
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var ConfigurationManagerInterface $configurationManager */
-        $configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
         $this->settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $this->settings = $this->settings['plugin.']['tx_typo3forum.']['settings.'];
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mittwald\Typo3Forum\Cache;
 
 /*                                                                      *
@@ -24,7 +25,6 @@ namespace Mittwald\Typo3Forum\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -36,56 +36,53 @@ use TYPO3\CMS\Core\SingletonInterface;
  *
  *
  */
-class Cache implements SingletonInterface {
+class Cache implements SingletonInterface
+{
+    const CACHE_NAME = 'typo3forum_main';
 
-	const CACHE_NAME = 'typo3forum_main';
+    /**
+     * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+     */
+    protected ?\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheInstance = null;
 
-	/**
-	 * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
-	 */
-	protected $cacheInstance = NULL;
+    /**
+     * @var \TYPO3\CMS\Core\Cache\CacheManager
+     */
+    protected \TYPO3\CMS\Core\Cache\CacheManager $cacheManager;
 
-	/**
-	 * @var \TYPO3\CMS\Core\Cache\CacheFactory
-	 */
-	protected $cacheFactory;
+    /**
+     * Constructor.
+     *
+     * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
+     */
+    public function __construct(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager)
+    {
+        $this->cacheManager  = $cacheManager;
+        $this->cacheInstance = $this->cacheManager->getCache(self::CACHE_NAME);
+    }
 
-	/**
-	 * @var \TYPO3\CMS\Core\Cache\CacheManager
-	 * @inject
-	 */
-	protected $cacheManager;
+    public function has($identifier)
+    {
+        return $this->cacheInstance->has($identifier);
+    }
 
-	/**
-	 *
-	 */
-	public function initializeObject() {
-		try {
-			$this->cacheInstance = $this->cacheManager->getCache(self::CACHE_NAME);
-		} catch (NoSuchCacheException $e) {
-			$this->cacheInstance = $this->cacheFactory->create(
-				self::CACHE_NAME,
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main']['frontend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main']['backend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main']['options']
-			);
-		}
-	}
+    public function get($identifier)
+    {
+        return $this->cacheInstance->get($identifier);
+    }
 
-	public function has($identifier) {
-		return $this->cacheInstance->has($identifier);
-	}
+    public function set($identifier, $value, array $tags = [], $lifetime = null)
+    {
+        $this->cacheInstance->set(
+            $identifier,
+            $value,
+            $tags,
+            $lifetime
+        );
+    }
 
-	public function get($identifier) {
-		return $this->cacheInstance->get($identifier);
-	}
-
-	public function set($identifier, $value, array $tags = [], $lifetime = NULL) {
-		$this->cacheInstance->set($identifier, $value, $tags, $lifetime);
-	}
-
-	public function flush() {
-		$this->cacheInstance->flush();
-	}
-
+    public function flush()
+    {
+        $this->cacheInstance->flush();
+    }
 }

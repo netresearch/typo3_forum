@@ -31,7 +31,7 @@ use TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper;
 /**
  * ViewHelper that renders a selectbox with a hierarchical list of all forums.
  */
-class ForumSelectViewHelper extends SelectViewHelper {
+class ForumSelectViewHelper extends AbstractFormFieldViewHelper {
 
 	/**
 	 * The forum repository.
@@ -40,11 +40,16 @@ class ForumSelectViewHelper extends SelectViewHelper {
 	 */
 	protected $forumRepository = NULL;
 
-	/**
-	 * Initializses the view helper arguments.
-	 * @return void
-	 */
-	public function initializeArguments() {
+
+    /**
+     * Initializes the view helper arguments.
+     *
+     * @return void
+     */
+    public function initializeArguments(): void
+    {
+        parent::initializeArguments();
+
 		AbstractFormFieldViewHelper::initializeArguments();
 		$this->registerUniversalTagAttributes();
 		$this->registerTagAttribute('multiple', 'string', 'if set, multiple select field');

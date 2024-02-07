@@ -8,36 +8,37 @@
 # Table structure for table "tx_typo3forum_domain_model_format_textparser"
 #
 DROP TABLE IF EXISTS tx_typo3forum_domain_model_format_textparser;
-CREATE TABLE tx_typo3forum_domain_model_format_textparser (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  type varchar(64) NOT NULL default 'Mittwald\\Typo3Forum\\Domain\\Model\\Format\\BBCode',
-  name tinytext,
-  icon_class tinytext,
-  bbcode_wrap varchar(64) default '',
-  regular_expression tinytext,
-  regular_expression_replacement tinytext,
-  smiley_shortcut varchar(16) default '',
-  language varchar(16) default '',
-  tstamp int(11) unsigned NOT NULL default '0',
-  crdate int(11) unsigned NOT NULL default '0',
-  deleted tinyint(4) unsigned NOT NULL default '0',
-  hidden tinyint(4) unsigned NOT NULL default '0',
-  t3ver_oid int(11) NOT NULL default '0',
-  t3ver_id int(11) NOT NULL default '0',
-  t3ver_wsid int(11) NOT NULL default '0',
-  t3ver_label varchar(30) NOT NULL default '',
-  t3ver_state tinyint(4) NOT NULL default '0',
-  t3ver_stage tinyint(4) NOT NULL default '0',
-  t3ver_count int(11) NOT NULL default '0',
-  t3ver_tstamp int(11) NOT NULL default '0',
-  t3ver_move_id int(11) NOT NULL default '0',
-  t3_origuid int(11) NOT NULL default '0',
-  sys_language_uid int(11) NOT NULL default '0',
-  l18n_parent int(11) NOT NULL default '0',
-  l18n_diffsource mediumblob NOT NULL,
-  PRIMARY KEY (uid),
-  KEY parent (pid)
+CREATE TABLE tx_typo3forum_domain_model_format_textparser
+(
+    uid                            int(11)             NOT NULL auto_increment,
+    pid                            int(11)             NOT NULL default '0',
+    type                           varchar(64)         NOT NULL default 'Mittwald\\Typo3Forum\\Domain\\Model\\Format\\BBCode',
+    name                           tinytext,
+    icon_class                     tinytext,
+    bbcode_wrap                    varchar(64)                  default '',
+    regular_expression             tinytext,
+    regular_expression_replacement tinytext,
+    smiley_shortcut                varchar(16)                  default '',
+    language                       varchar(16)                  default '',
+    tstamp                         int(11) unsigned    NOT NULL default '0',
+    crdate                         int(11) unsigned    NOT NULL default '0',
+    deleted                        tinyint(4) unsigned NOT NULL default '0',
+    hidden                         tinyint(4) unsigned NOT NULL default '0',
+    t3ver_oid                      int(11)             NOT NULL default '0',
+    t3ver_id                       int(11)             NOT NULL default '0',
+    t3ver_wsid                     int(11)             NOT NULL default '0',
+    t3ver_label                    varchar(30)         NOT NULL default '',
+    t3ver_state                    tinyint(4)          NOT NULL default '0',
+    t3ver_stage                    tinyint(4)          NOT NULL default '0',
+    t3ver_count                    int(11)             NOT NULL default '0',
+    t3ver_tstamp                   int(11)             NOT NULL default '0',
+    t3ver_move_id                  int(11)             NOT NULL default '0',
+    t3_origuid                     int(11)             NOT NULL default '0',
+    sys_language_uid               int(11)             NOT NULL default '0',
+    l18n_parent                    int(11)             NOT NULL default '0',
+    l18n_diffsource                mediumblob          NOT NULL,
+    PRIMARY KEY (uid),
+    KEY parent (pid)
 );
 
 
@@ -78,33 +79,34 @@ INSERT INTO tx_typo3forum_domain_model_format_textparser (`uid`, `pid`, `type`, 
 # Table structure for table "tx_typo3forum_domain_model_moderation_reportworkflowstatus"
 #
 DROP TABLE IF EXISTS tx_typo3forum_domain_model_moderation_reportworkflowstatus;
-CREATE TABLE tx_typo3forum_domain_model_moderation_reportworkflowstatus (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  name tinytext,
-  icon tinytext,
-  followup_status int(11) unsigned NOT NULL default '0',
-  initial tinyint(1) NOT NULL default '0',
-  final tinyint(1) NOT NULL default '0',
-  tstamp int(11) unsigned NOT NULL default '0',
-  crdate int(11) unsigned NOT NULL default '0',
-  deleted tinyint(4) unsigned NOT NULL default '0',
-  hidden tinyint(4) unsigned NOT NULL default '0',
-  t3ver_oid int(11) NOT NULL default '0',
-  t3ver_id int(11) NOT NULL default '0',
-  t3ver_wsid int(11) NOT NULL default '0',
-  t3ver_label varchar(30) NOT NULL default '',
-  t3ver_state tinyint(4) NOT NULL default '0',
-  t3ver_stage tinyint(4) NOT NULL default '0',
-  t3ver_count int(11) NOT NULL default '0',
-  t3ver_tstamp int(11) NOT NULL default '0',
-  t3ver_move_id int(11) NOT NULL default '0',
-  t3_origuid int(11) NOT NULL default '0',
-  sys_language_uid int(11) NOT NULL default '0',
-  l18n_parent int(11) NOT NULL default '0',
-  l18n_diffsource mediumblob NOT NULL,
-  PRIMARY KEY (uid),
-  KEY parent (pid)
+CREATE TABLE tx_typo3forum_domain_model_moderation_reportworkflowstatus
+(
+    uid              int(11)             NOT NULL auto_increment,
+    pid              int(11)             NOT NULL default '0',
+    name             tinytext,
+    icon             tinytext,
+    followup_status  int(11) unsigned    NOT NULL default '0',
+    initial          tinyint(1)          NOT NULL default '0',
+    final            tinyint(1)          NOT NULL default '0',
+    tstamp           int(11) unsigned    NOT NULL default '0',
+    crdate           int(11) unsigned    NOT NULL default '0',
+    deleted          tinyint(4) unsigned NOT NULL default '0',
+    hidden           tinyint(4) unsigned NOT NULL default '0',
+    t3ver_oid        int(11)             NOT NULL default '0',
+    t3ver_id         int(11)             NOT NULL default '0',
+    t3ver_wsid       int(11)             NOT NULL default '0',
+    t3ver_label      varchar(30)         NOT NULL default '',
+    t3ver_state      tinyint(4)          NOT NULL default '0',
+    t3ver_stage      tinyint(4)          NOT NULL default '0',
+    t3ver_count      int(11)             NOT NULL default '0',
+    t3ver_tstamp     int(11)             NOT NULL default '0',
+    t3ver_move_id    int(11)             NOT NULL default '0',
+    t3_origuid       int(11)             NOT NULL default '0',
+    sys_language_uid int(11)             NOT NULL default '0',
+    l18n_parent      int(11)             NOT NULL default '0',
+    l18n_diffsource  mediumblob          NOT NULL,
+    PRIMARY KEY (uid),
+    KEY parent (pid)
 );
 
 
@@ -124,20 +126,21 @@ INSERT INTO tx_typo3forum_domain_model_moderation_reportworkflowstatus VALUES ('
 # Table structure for table "tx_typo3forum_domain_model_moderation_reportworkflowstatus_mm"
 #
 DROP TABLE IF EXISTS tx_typo3forum_domain_model_moderation_reportworkflowstatus_mm;
-CREATE TABLE tx_typo3forum_domain_model_moderation_reportworkflowstatus_mm (
-  uid int(10) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  uid_local int(11) unsigned NOT NULL default '0',
-  uid_foreign int(11) unsigned NOT NULL default '0',
-  sorting int(11) unsigned NOT NULL default '0',
-  sorting_foreign int(11) unsigned NOT NULL default '0',
-  tstamp int(10) unsigned NOT NULL default '0',
-  crdate int(10) unsigned NOT NULL default '0',
-  hidden tinyint(3) unsigned NOT NULL default '0',
-  PRIMARY KEY (uid),
-  KEY parent (pid),
-  KEY uid_local (uid_local),
-  KEY uid_foreign (uid_foreign)
+CREATE TABLE tx_typo3forum_domain_model_moderation_reportworkflowstatus_mm
+(
+    uid             int(10)             NOT NULL auto_increment,
+    pid             int(11)             NOT NULL default '0',
+    uid_local       int(11) unsigned    NOT NULL default '0',
+    uid_foreign     int(11) unsigned    NOT NULL default '0',
+    sorting         int(11) unsigned    NOT NULL default '0',
+    sorting_foreign int(11) unsigned    NOT NULL default '0',
+    tstamp          int(10) unsigned    NOT NULL default '0',
+    crdate          int(10) unsigned    NOT NULL default '0',
+    hidden          tinyint(3) unsigned NOT NULL default '0',
+    PRIMARY KEY (uid),
+    KEY parent (pid),
+    KEY uid_local (uid_local),
+    KEY uid_foreign (uid_foreign)
 );
 
 
@@ -152,32 +155,33 @@ INSERT INTO tx_typo3forum_domain_model_moderation_reportworkflowstatus_mm VALUES
 # Table structure for table "tx_typo3forum_domain_model_user_userfield_userfield"
 #
 DROP TABLE IF EXISTS tx_typo3forum_domain_model_user_userfield_userfield;
-CREATE TABLE tx_typo3forum_domain_model_user_userfield_userfield (
-  uid int(11) NOT NULL auto_increment,
-  pid int(11) NOT NULL default '0',
-  type tinytext,
-  name tinytext,
-  typoscript_path tinytext,
-  map_to_user_object varchar(64) default '',
-  tstamp int(11) unsigned NOT NULL default '0',
-  crdate int(11) unsigned NOT NULL default '0',
-  deleted tinyint(4) unsigned NOT NULL default '0',
-  hidden tinyint(4) unsigned NOT NULL default '0',
-  t3ver_oid int(11) NOT NULL default '0',
-  t3ver_id int(11) NOT NULL default '0',
-  t3ver_wsid int(11) NOT NULL default '0',
-  t3ver_label varchar(30) NOT NULL default '',
-  t3ver_state tinyint(4) NOT NULL default '0',
-  t3ver_stage tinyint(4) NOT NULL default '0',
-  t3ver_count int(11) NOT NULL default '0',
-  t3ver_tstamp int(11) NOT NULL default '0',
-  t3ver_move_id int(11) NOT NULL default '0',
-  t3_origuid int(11) NOT NULL default '0',
-  sys_language_uid int(11) NOT NULL default '0',
-  l18n_parent int(11) NOT NULL default '0',
-  l18n_diffsource mediumblob NOT NULL,
-  PRIMARY KEY (uid),
-  KEY parent (pid)
+CREATE TABLE tx_typo3forum_domain_model_user_userfield_userfield
+(
+    uid                int(11)             NOT NULL auto_increment,
+    pid                int(11)             NOT NULL default '0',
+    type               tinytext,
+    name               tinytext,
+    typoscript_path    tinytext,
+    map_to_user_object varchar(64)                  default '',
+    tstamp             int(11) unsigned    NOT NULL default '0',
+    crdate             int(11) unsigned    NOT NULL default '0',
+    deleted            tinyint(4) unsigned NOT NULL default '0',
+    hidden             tinyint(4) unsigned NOT NULL default '0',
+    t3ver_oid          int(11)             NOT NULL default '0',
+    t3ver_id           int(11)             NOT NULL default '0',
+    t3ver_wsid         int(11)             NOT NULL default '0',
+    t3ver_label        varchar(30)         NOT NULL default '',
+    t3ver_state        tinyint(4)          NOT NULL default '0',
+    t3ver_stage        tinyint(4)          NOT NULL default '0',
+    t3ver_count        int(11)             NOT NULL default '0',
+    t3ver_tstamp       int(11)             NOT NULL default '0',
+    t3ver_move_id      int(11)             NOT NULL default '0',
+    t3_origuid         int(11)             NOT NULL default '0',
+    sys_language_uid   int(11)             NOT NULL default '0',
+    l18n_parent        int(11)             NOT NULL default '0',
+    l18n_diffsource    mediumblob          NOT NULL,
+    PRIMARY KEY (uid),
+    KEY parent (pid)
 );
 
 

@@ -28,11 +28,12 @@ use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Fluid\ViewHelpers\ImageViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * ViewHelper that renders a user's avatar.
  */
-class AvatarViewHelper extends ImageViewHelper
+class AvatarViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * Initialize arguments.

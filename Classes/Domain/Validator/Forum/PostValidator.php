@@ -1,4 +1,5 @@
 <?php
+
 namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
 
 /*                                                                      *
@@ -24,42 +25,53 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use function strlen;
 
-class PostValidator extends AbstractValidator {
+class PostValidator extends AbstractValidator
+{
 
-	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-	 * @inject
-	 */
-	protected $userRepository = NULL;
+    /**
+     * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
+     * @inject
+     */
+    protected $userRepository = null;
 
-	/**
-	 * Check if $value is valid. If it is not valid, needs to add an error
-	 * to Result.
-	 *
-	 * @param \Mittwald\Typo3Forum\Domain\Model\Forum\Post $post
-	 * @return bool
-	 */
-	protected function isValid($post) {
-		$result = TRUE;
+    /**
+     * Check if $value is valid. If it is not valid, needs to add an error
+     * to Result.
+     *
+     * @param mixed|Post $value
+     *
+     * @return bool
+     */
+    protected function isValid(mixed $value): void
+    {
+// TODO
+DebuggerUtility::var_dump(__METHOD__);
+exit;
 
-		if (trim($post->getText()) === '') {
-			$this->addError('The post can\'t be empty!.', 1221560718);
-			$result = FALSE;
-		}
+        if (trim($post->getText()) === '') {
+            $this->addError(
+                'The post can\'t be empty!.',
+                1221560718
+            );
+        }
 
-		if ($this->userRepository->findCurrent()->isAnonymous()) {
-			if (empty($post->getAuthorName())) {
-				$this->addError('Author name must be present when post is created by anonymous user.', 1335106565);
-				$result = FALSE;
-			} elseif (strlen($post->getAuthorName()) < 3) {
-				$this->addError('Author name must be at least three characters long.', 1335106566);
-				$result = FALSE;
-			}
-		}
-
-		return $result;
-	}
-
+        if ($this->userRepository->findCurrent()->isAnonymous()) {
+            if (empty($post->getAuthorName())) {
+                $this->addError(
+                    'Author name must be present when post is created by anonymous user.',
+                    1335106565
+                );
+            } elseif (strlen($post->getAuthorName()) < 3) {
+                $this->addError(
+                    'Author name must be at least three characters long.',
+                    1335106566
+                );
+            }
+        }
+    }
 }

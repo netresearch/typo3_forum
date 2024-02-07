@@ -28,11 +28,13 @@ use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * ViewHelper that renders a user's avatar.
  */
-class AvatarUrlViewHelper extends CObjectViewHelper {
+class AvatarUrlViewHelper extends AbstractViewHelper
+{
 
 	/**
 	 * An instance of the Extbase Signal-/Slot-Dispatcher.

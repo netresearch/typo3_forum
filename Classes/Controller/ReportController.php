@@ -104,7 +104,7 @@ class ReportController extends AbstractController {
 		$this->signalSlotDispatcher->dispatch(Report::class, 'reportCreated', ['report' => $report]);
 
 		// Display success message and redirect to topic->show action.
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(LocalizationUtility::translate('Report_New_Success', 'Typo3Forum'))
 		);
 		$this->redirect('show', 'User', NULL, ['user' => $user], $this->settings['pids']['UserShow']);
@@ -129,7 +129,7 @@ class ReportController extends AbstractController {
 		$this->signalSlotDispatcher->dispatch(Report::class, 'reportCreated', ['report' => $report]);
 
 		// Display success message and redirect to topic->show action.
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(LocalizationUtility::translate('Report_New_Success', 'Typo3Forum'))
 		);
 		$this->redirect('show', 'Topic', NULL, ['topic' => $post->getTopic()]);

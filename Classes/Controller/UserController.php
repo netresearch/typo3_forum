@@ -32,6 +32,7 @@ use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessageText;
 use Mittwald\Typo3Forum\Service\FrontendUserService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -427,7 +428,7 @@ class UserController extends AbstractController {
 
 		# Update user and redirect to subscription object.
 		$this->frontendUserRepository->update($user);
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage($this->getSubscriptionFlashMessage($object, $unsubscribe))
 		);
 		$this->clearCacheForCurrentPage();
@@ -469,7 +470,7 @@ class UserController extends AbstractController {
 		# Update user and redirect to subscription object.
 		$this->frontendUserRepository->update($user);
 		$this->frontendUserRepository->update($topic->getAuthor());
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage($this->getSubscriptionFlashMessage($object, $unsubscribe))
 		);
 		$this->clearCacheForCurrentPage();
@@ -523,34 +524,63 @@ class UserController extends AbstractController {
 	public function searchUserAction($searchValue = NULL, $filter = NULL, $order = NULL) {
 	}
 
-	/**
-	 * Redirects the user to the display view of a subscribeable object. This may
-	 * either be a forum or a topic, so this method redirects either to the
-	 * Forum->show or the Topic->show action.
-	 *
-	 * @param SubscribeableInterface $object A subscribeable object, i.e. either a forum or a topic.
-	 */
-	protected function redirectToSubscriptionObject(SubscribeableInterface $object) {
-		if ($object instanceof Forum) {
-			$this->redirect('show', 'Forum', NULL, ['forum' => $object]);
-		}
-		if ($object instanceof Topic) {
-			$this->redirect('show', 'Topic', NULL, ['topic' => $object, 'forum' => $object->getForum()]);
-		}
-	}
+    /**
+     * Redirects the user to the display view of a subscribeable object. This may
+     * either be a forum or a topic, so this method redirects either to the
+     * Forum->show or the Topic->show action.
+     *
+     * @param SubscribeableInterface $object A subscribeable object, i.e. either a forum or a topic.
+     */
+    protected function redirectToSubscriptionObject(SubscribeableInterface $object): ResponseInterface
+    {
+        if ($object instanceof Forum) {
+            return $this->redirect(
+                'show',
+                'Forum',
+                null,
+                ['forum' => $object]
+            );
+        }
 
-	/**
-	 * Generates a flash message for when a subscription has successfully been
-	 * created or removed.
-	 *
-	 * @param SubscribeableInterface $object
-	 * @param bool $unsubscribe
-	 * @return string A flash message.
-	 */
-	protected function getSubscriptionFlashMessage(SubscribeableInterface $object, $unsubscribe = FALSE) {
-		$type = array_pop(explode('\\', get_class($object)));
-		$key = 'User_' . ($unsubscribe ? 'Uns' : 'S') . 'ubscribe_' . $type . '_Success';
-		return LocalizationUtility::translate($key, 'Typo3Forum', [$object->getTitle()]);
-	}
+        if ($object instanceof Topic) {
+            return $this->redirect(
+                'show',
+                'Topic',
+                null,
+                [
+                    'topic' => $object,
+                    'forum' => $object->getForum(),
+                ]
+            );
+        }
+    }
 
+    /**
+     * Generates a flash message for when a subscription has successfully been
+     * created or removed.
+     *
+     * @param SubscribeableInterface $object
+     * @param bool                   $unsubscribe
+     *
+     * @return string A flash message.
+     */
+    protected function getSubscriptionFlashMessage(SubscribeableInterface $object, bool $unsubscribe = false): string
+    {
+        $type = array_pop(
+            explode(
+                '\\',
+                get_class($object)
+            )
+        );
+
+        $key = 'User_' . ($unsubscribe ? 'Uns' : 'S') . 'ubscribe_' . $type . '_Success';
+
+        return LocalizationUtility::translate(
+            $key,
+            'Typo3Forum',
+            [
+                $object->getTitle(),
+            ]
+        );
+    }
 }

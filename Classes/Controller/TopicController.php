@@ -28,6 +28,9 @@ use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TopicController extends AbstractController {
 
@@ -110,35 +113,43 @@ class TopicController extends AbstractController {
 	}
 
     /**
-     *  Listing Action.
-     * @return void
+     * Listing Action.
+     *
+     * @return ResponseInterface
      */
-    public function listAction() {
+    public function listAction(): ResponseInterface
+    {
+        $showPaginate = false;
 
-        $showPaginate = FALSE;
         switch ($this->settings['listTopics']) {
             case '2':
                 $dataset = $this->topicRepository->findQuestions();
-                $showPaginate = TRUE;
+                $showPaginate = true;
                 $partial = 'Topic/List';
                 break;
+
             case '3':
                 $dataset = $this->topicRepository->findQuestions(intval($this->settings['maxTopicItems']));
                 $partial = 'Topic/QuestionBox';
                 break;
+
             case '4':
                 $dataset = $this->topicRepository->findPopularTopics(intval($this->settings['popularTopicTimeDiff']), intval($this->settings['maxTopicItems']));
                 $partial = 'Topic/ListBox';
                 break;
+
             default:
                 $dataset      = $this->topicRepository->findAll();
                 $partial      = 'Topic/List';
-                $showPaginate = TRUE;
+                $showPaginate = true;
                 break;
         }
+
         $this->view->assign('showPaginate', $showPaginate);
         $this->view->assign('partial', $partial);
         $this->view->assign('topics', $dataset);
+
+        return $this->htmlResponse();
     }
 
 	/**
@@ -155,39 +166,63 @@ class TopicController extends AbstractController {
 		$this->view->assign('topics', $topics);
 	}
 
-	/**
-	 * Show action. Displays a single topic and all posts contained in this topic.
-	 *
-	 * @param Topic $topic The topic that is to be displayed.
-	 * @param Post $quote An optional post that will be quoted within the bodytext of the new post.
-	 * @param int $showForm ShowForm
-	 */
-	public function showAction(Topic $topic, Post $quote = NULL, $showForm = 0) {
-		$posts = $this->postRepository->findForTopic($topic);
+    /**
+     * @return PageRenderer
+     */
+    protected function getPageRenderer(): PageRenderer
+    {
+        return GeneralUtility::makeInstance(PageRenderer::class);
+    }
 
-		if ($quote != FALSE) {
-			$this->view->assign('quote', $this->postFactory->createPostWithQuote($quote));
-		}
-		// Set Title
-		$GLOBALS['TSFE']->page['title'] = $topic->getTitle();
+    /**
+     * Show action. Displays a single topic and all posts contained in this topic.
+     *
+     * @param Topic     $topic    The topic that is to be displayed.
+     * @param null|Post $quote    An optional post that will be quoted within the bodytext of the new post.
+     * @param int       $showForm ShowForm
+     *
+     * @return ResponseInterface
+     */
+    public function showAction(Topic $topic, Post $quote = null, int $showForm = 0): ResponseInterface
+    {
+        $posts = $this->postRepository->findForTopic($topic);
 
-		$googlePlus = $topic->getAuthor()->getGoogle();
-		if ($googlePlus) {
-			$this->response->addAdditionalHeaderData('<link rel="author" href="' . $googlePlus . '"/>');
-		}
+        if (
+            ($quote !== false)
+            && ($quote !== null)
+        ) {
+            $this->view->assign('quote', $this->postFactory->createPostWithQuote($quote));
+        }
 
-		// send signal for simple read count
-		$this->signalSlotDispatcher->dispatch(Topic::class, 'topicDisplayed', ['topic' => $topic]);
+        // Set Title
+        $GLOBALS['TSFE']->page['title'] = $topic->getTitle();
 
-		$this->authenticationService->assertReadAuthorization($topic);
-		$this->markTopicRead($topic);
-		$this->view->assignMultiple([
-			'posts' => $posts,
-			'showForm' => $showForm,
-			'topic' => $topic,
-			'user' => $this->authenticationService->getUser(),
-		]);
-	}
+        $googlePlus = $topic->getAuthor()->getGoogle();
+        if ($googlePlus) {
+            $this->getPageRenderer()->addHeaderData('<link rel="author" href="' . $googlePlus . '"/>');
+        }
+
+        // send signal for simple read count
+        $this->signalSlotDispatcher->dispatch(
+            Topic::class,
+            'topicDisplayed',
+            [
+                'topic' => $topic,
+            ]
+        );
+
+        $this->authenticationService->assertReadAuthorization($topic);
+        $this->markTopicRead($topic);
+
+        $this->view->assignMultiple([
+            'posts'    => $posts,
+            'showForm' => $showForm,
+            'topic'    => $topic,
+            'user'     => $this->authenticationService->getUser(),
+        ]);
+
+        return $this->htmlResponse();
+    }
 
 	/**
 	 * New action. Displays a form for creating a new topic.

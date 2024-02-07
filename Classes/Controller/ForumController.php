@@ -61,14 +61,15 @@ class ForumController extends AbstractController {
 	 */
 	protected $rootForum;
 
-	/**
-	 *
-	 */
-	public function initializeAction() {
-		$this->databaseConnection = $GLOBALS['TYPO3_DB'];
-	}
+    /**
+     *
+     */
+    public function initializeAction(): void
+    {
+        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
+    }
 
-	/**
+    /**
 	 * Index action. Displays the first two levels of the forum tree.
 	 * @return void
 	 */

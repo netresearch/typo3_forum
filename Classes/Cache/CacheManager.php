@@ -24,8 +24,8 @@ namespace Mittwald\Typo3Forum\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class CacheManager {
 
@@ -38,9 +38,7 @@ class CacheManager {
 	 *
 	 */
 	public function clearAll() {
-		/** @var ObjectManager $objectManager */
-		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-		$cache = $objectManager->get(Cache::class);
+		$cache = GeneralUtility::makeInstance(Cache::class);
 		$cache->flush();
 		$this->deleteTemporaryFiles();
 	}
@@ -50,7 +48,7 @@ class CacheManager {
 	 */
 	protected function deleteTemporaryFiles() {
 		foreach ($this->fileCachePaths as $fileCachePath) {
-			$files = glob(PATH_site . $fileCachePath . '/*');
+			$files = glob(Environment::getPublicPath() . '/' . $fileCachePath . '/*');
 
 			if(!is_array($files)) {
 				// skip

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mittwald\Typo3Forum\Domain\Validator\User;
 
 /*                                                                      *
@@ -24,6 +25,8 @@ namespace Mittwald\Typo3Forum\Domain\Validator\User;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
@@ -40,35 +43,39 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
  *             http://opensource.org/licenses/gpl-license.php
  *
  */
-class PrivateMessageRecipientValidator extends AbstractValidator {
+class PrivateMessageRecipientValidator extends AbstractValidator
+{
+    /**
+     * @var FrontendUserRepository
+     * @inject
+     */
+    protected FrontendUserRepository $userRepository;
 
+    /**
+     * Check if $value is valid. If it is not valid, needs to add an error
+     * to Result.
+     *
+     * @param $value
+     *
+     * @return bool
+     */
+    protected function isValid(mixed $value): void
+    {
+        if (!$this->userRepository->findOneByUsername($value)) {
+            $this->addError(
+                'PM reciepient user not found!',
+                1372429326
+            );
+        }
 
-	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-	 * @inject
-	 */
-	protected $userRepository = NULL;
+        /** @var FrontendUser $user */
+        $user = $this->userRepository->findCurrent();
 
-	/**
-	 * Check if $value is valid. If it is not valid, needs to add an error
-	 * to Result.
-	 *
-	 * @param $value
-	 * @return bool
-	 */
-	protected function isValid($value) {
-		$result = TRUE;
-
-		if (!$this->userRepository->findOneByUsername($value)) {
-			$this->addError('PM reciepient user not found!', 1372429326);
-			$result = FALSE;
-		}
-		$user = $this->userRepository->findCurrent();
-		if ($user->getUsername() == $value) {
-			$this->addError('You can\'t write yourself a message :)', 1372682275);
-			$result = FALSE;
-		}
-
-		return $result;
-	}
+        if ($user->getUsername() == $value) {
+            $this->addError(
+                'You can\'t write yourself a message :)',
+                1372682275
+            );
+        }
+    }
 }

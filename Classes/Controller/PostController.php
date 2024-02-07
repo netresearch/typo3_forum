@@ -270,7 +270,7 @@ class PostController extends AbstractController {
         );
 
 		// Display flash message and redirect to topic->show action.
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Post_Create_Success'))
 		);
 		$this->clearCacheForCurrentPage();
@@ -321,7 +321,7 @@ class PostController extends AbstractController {
 
 		$this->signalSlotDispatcher->dispatch(Post::class, 'postUpdated',
 			['post' => $post]);
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Post_Update_Success'))
 		);
 		$this->clearCacheForCurrentPage();
@@ -353,7 +353,7 @@ class PostController extends AbstractController {
 		// Delete the post.
 		$postCount = $post->getTopic()->getPostCount();
 		$this->postFactory->deletePost($post);
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Post_Delete_Success'))
 		);
 

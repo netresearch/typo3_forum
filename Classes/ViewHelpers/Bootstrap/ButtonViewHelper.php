@@ -1,4 +1,5 @@
 <?php
+
 namespace Mittwald\Typo3Forum\ViewHelpers\Bootstrap;
 /*                                                                    - *
  *  COPYRIGHT NOTICE                                                    *
@@ -23,40 +24,83 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Bootstrap;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * ViewHelper that renders a big button.
  */
-class ButtonViewHelper extends ActionViewHelper {
+class ButtonViewHelper extends AbstractTagBasedViewHelper
+{
+    /**
+     * Initialize all arguments.
+     *
+     * @return void
+     */
+    public function initializeArguments(): void
+    {
+        parent::initializeArguments();
 
-	public function initializeArguments() {
-		parent::initializeArguments();
+        $this->registerArgument(
+            'primary',
+            'boolean',
+            'Primary button',
+            false,
+            false
+        );
+        $this->registerArgument(
+            'label',
+            'string',
+            'Button label',
+            true
+        );
+        $this->registerArgument(
+            'icon',
+            'string',
+            'Icon',
+            false,
+            null
+        );
+    }
 
-		$this->registerArgument('primary', 'boolean', 'Primary button', FALSE, FALSE);
-		$this->registerArgument('label', 'string', 'Button label', TRUE);
-		$this->registerArgument('icon', 'string', 'Icon', FALSE, NULL);
-	}
+    /**
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
 
-	public function initialize() {
-		parent::initialize();
+        $class = 'btn';
 
-		$class = 'btn';
+        if ($this->arguments['primary'] === true) {
+            $class .= ' btn-primary';
+        }
 
-		if ($this->arguments['primary'] === TRUE) {
-			$class .= ' btn-primary';
-		}
+        $this->tag->addAttribute(
+            'class',
+            $class
+        );
+    }
 
-		$this->tag->addAttribute('class', $class);
-	}
+    /**
+     * Helper method which triggers the rendering of everything between the
+     * opening and the closing tag.
+     *
+     * @return string
+     */
+    public function renderChildren(): string
+    {
+        if ($this->arguments['icon']) {
+            $content = '<i class="tx-typo3forum-icon-16-' . $this->arguments['icon'] . '"></i> ';
+        } else {
+            $content = '';
+        }
 
-	public function renderChildren() {
-		if ($this->arguments['icon']) {
-			$content = '<i class="tx-typo3forum-icon-16-' . $this->arguments['icon'] . '"></i> ';
-		} else {
-			$content = '';
-		}
-		$content .= \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->arguments['label'], 'typo3_forum');
-		return $content;
-	}
+        $content .= LocalizationUtility::translate(
+            $this->arguments['label'],
+            'typo3_forum'
+        );
+
+        return $content;
+    }
 }

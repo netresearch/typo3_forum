@@ -27,10 +27,10 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Post;
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-class HelpfulButtonViewHelper extends CObjectViewHelper
+class HelpfulButtonViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var array
      */

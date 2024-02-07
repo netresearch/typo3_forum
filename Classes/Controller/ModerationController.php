@@ -153,7 +153,7 @@ class ModerationController extends AbstractController {
 		$report->addComment($comment);
 		$this->reportRepository->update($report);
 
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Report_NewComment_Success'))
 		);
 
@@ -186,7 +186,7 @@ class ModerationController extends AbstractController {
 		$report->addComment($comment);
 		$this->reportRepository->update($report);
 
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Report_NewComment_Success'))
 		);
 
@@ -287,7 +287,7 @@ class ModerationController extends AbstractController {
 			$this->topicFactory->moveTopic($topic, $moveTopicTarget);
 		}
 
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Moderation_UpdateTopic_Success', 'Typo3Forum'))
 		);
 		$this->clearCacheForCurrentPage();
@@ -307,7 +307,7 @@ class ModerationController extends AbstractController {
 			$this->postRepository->remove($post);
 		}
 		$this->topicRepository->remove($topic);
-		$this->controllerContext->getFlashMessageQueue()->enqueue(
+		$this->getFlashMessageQueue()->enqueue(
 			new FlashMessage(Localization::translate('Moderation_DeleteTopic_Success', 'Typo3Forum'))
 		);
 		$this->clearCacheForCurrentPage();
